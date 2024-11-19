@@ -26,7 +26,27 @@ namespace GildedRoseTests
             GildedRose app = new GildedRose(Items);
             app.UpdateQuality();
             Assert.Equal(8, Items[0].Quality);
-           
+        }
+
+        [Theory]
+        [InlineData(0, 1)]
+        [InlineData(0, 0)]
+        public void Quality_Should_Never_Be_Less_Than_Zero(int sellIn, int quality)
+        {
+            IList<Item> Items = new List<Item> { new Item { Name = "Bone of Death", SellIn = sellIn, Quality = quality } };
+            GildedRose app = new GildedRose(Items);
+            app.UpdateQuality();
+            Assert.Equal(0, Items[0].Quality);
+        }
+        [Theory]
+        [InlineData(0, 50)]
+        
+        public void Quality_Should_Never_Be_More_Than_50(int sellIn, int quality)
+        {
+            IList<Item> Items = new List<Item> { new Item { Name = "Potion of Piffle", SellIn = sellIn, Quality = quality } };
+            GildedRose app = new GildedRose(Items);
+            app.UpdateQuality();
+            Assert.True(Items[0].Quality <=50);
         }
     }
 }

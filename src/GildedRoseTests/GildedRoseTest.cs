@@ -7,7 +7,7 @@ namespace GildedRoseTests
     public class GildedRoseTest
     {
         [Theory]
-        [InlineData(10,10)]
+        [InlineData(10, 10)]
         public void Aged_Brie_Increases_In_Quality_With_Age(int sellIn, int quality)
         {
             IList<Item> Items = new List<Item> { new Item { Name = "Aged Brie", SellIn = sellIn, Quality = quality } };
@@ -40,14 +40,26 @@ namespace GildedRoseTests
         }
         [Theory]
         [InlineData(0, 50)]
-        
+
         public void Quality_Should_Never_Be_More_Than_50(int sellIn, int quality)
         {
             IList<Item> Items = new List<Item> { new Item { Name = "Potion of Piffle", SellIn = sellIn, Quality = quality } };
             GildedRose app = new GildedRose(Items);
             app.UpdateQuality();
-            Assert.True(Items[0].Quality <=50);
+            Assert.True(Items[0].Quality <= 50);
         }
+
+        [Fact]
+        public void Sulfuras_Never_Decreases_In_Quality_Nor_Has_To_Be_Sold()
+        {
+            IList<Item> Items = new List<Item> { new Item { Name ="Sulfuras", SellIn = 20, Quality = 50 } };
+            GildedRose app = new GildedRose(Items);
+            app.UpdateQuality();
+            Assert.Equal(50,Items[0].Quality);
+            Assert.Equal(20,Items[0].SellIn);
+
+        }
+
     }
 }
 

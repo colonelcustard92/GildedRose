@@ -6,114 +6,119 @@ namespace GildedRoseTests
 {
     public class GildedRoseTest
     {
-
+        private static GildedRose CreateGildedRose(IList<Item> items)
+        {
+            return new GildedRose(items);
+        }
 
         [Theory]
         [InlineData(10, 10)]
-        public void Aged_Brie_Increases_In_Quality_With_Age(int sellIn, int quality)
+        public void AgedBrie_QualityIncreasesAsItAges(int sellIn, int quality)
         {
-            IList<Item> Items = new List<Item> { new Item { Name = "Aged Brie", SellIn = sellIn, Quality = quality } };
-            GildedRose app = new GildedRose(Items);
-            app.UpdateQuality();
-            Assert.Equal(11, Items[0].Quality);
-            Assert.Equal(9, Items[0].SellIn);
-        }
+            var items = new List<Item> { new Item { Name = "Aged Brie", SellIn = sellIn, Quality = quality } };
+            var app = CreateGildedRose(items);
 
+            app.UpdateQuality();
+
+            Assert.Equal(11, items[0].Quality);
+            Assert.Equal(9, items[0].SellIn);
+        }
 
         [Theory]
         [InlineData(0, 10)]
-        public void Given_Item_Is_Past_Sellby_Date_Quality_Degrades_By_Double(int sellIn, int quality)
+        public void ItemPastSellByDate_QualityDecreasesByTwo(int sellIn, int quality)
         {
-            IList<Item> Items = new List<Item> { new Item { Name = "Bread of Doom", SellIn = sellIn, Quality = quality } };
-            GildedRose app = new GildedRose(Items);
+            var items = new List<Item> { new Item { Name = "Bread of Doom", SellIn = sellIn, Quality = quality } };
+            var app = CreateGildedRose(items);
+
             app.UpdateQuality();
-            Assert.Equal(8, Items[0].Quality);
+
+            Assert.Equal(8, items[0].Quality);
         }
 
         [Theory]
         [InlineData(0, -3)]
-        public void Quality_Should_Never_Be_Less_Than_Zero(int sellIn, int quality)
+        public void QualityNeverLessThanZero(int sellIn, int quality)
         {
-            IList<Item> Items = new List<Item> { new Item { Name = "Bone of Death", SellIn = sellIn, Quality = quality } };
-            GildedRose app = new GildedRose(Items);
+            var items = new List<Item> { new Item { Name = "Bone of Death", SellIn = sellIn, Quality = quality } };
+            var app = CreateGildedRose(items);
+
             app.UpdateQuality();
-            Assert.Equal(0, Items[0].Quality);
+
+            Assert.Equal(0, items[0].Quality);
         }
+
         [Theory]
         [InlineData(0, 50)]
-
-        public void Quality_Should_Never_Be_More_Than_50(int sellIn, int quality)
+        public void QualityNeverMoreThanFifty(int sellIn, int quality)
         {
-            IList<Item> Items = new List<Item> { new Item { Name = "Potion of Piffle", SellIn = sellIn, Quality = quality } };
-            GildedRose app = new GildedRose(Items);
+            var items = new List<Item> { new Item { Name = "Potion of Piffle", SellIn = sellIn, Quality = quality } };
+            var app = CreateGildedRose(items);
+
             app.UpdateQuality();
-            Assert.True(Items[0].Quality <= 50);
+
+            Assert.True(items[0].Quality <= 50);
         }
 
         [Fact]
-        public void Sulfuras_Never_Decreases_In_Quality_Nor_Has_To_Be_Sold()
+        public void Sulfuras_NeverDecreasesInQualityNorSellIn()
         {
-            IList<Item> Items = new List<Item> { new Item { Name ="Sulfuras", SellIn = 20, Quality = 80 } };
-            GildedRose app = new GildedRose(Items);
-            app.UpdateQuality();
-            Assert.Equal(80,Items[0].Quality);
-            Assert.Equal(20,Items[0].SellIn);
+            var items = new List<Item> { new Item { Name = "Sulfuras", SellIn = 20, Quality = 80 } };
+            var app = CreateGildedRose(items);
 
+            app.UpdateQuality();
+
+            Assert.Equal(80, items[0].Quality);
+            Assert.Equal(20, items[0].SellIn);
         }
 
         [Fact]
-        public void Backstage_Pass_Increases_In_Quality_By_2_Given_10_Or_Less_Days()
-        { 
-            IList<Item> Items = new List<Item> { new Item { Name = "Backstage passes to a TAFKAL80ETC concert", SellIn = 10, Quality = 20} };
-            GildedRose app = new GildedRose(Items);
+        public void BackstagePass_QualityIncreasesByTwoWhenSellInIsTenOrLess()
+        {
+            var items = new List<Item> { new Item { Name = "Backstage passes to a TAFKAL80ETC concert", SellIn = 10, Quality = 20 } };
+            var app = CreateGildedRose(items);
+
             app.UpdateQuality();
-            Assert.Equal(22, Items[0].Quality);
+
+            Assert.Equal(22, items[0].Quality);
         }
 
         [Fact]
-        public void Backstage_Pass_Increases_In_Quality_By_3_Given_5_Or_Less_Days()
+        public void BackstagePass_QualityIncreasesByThreeWhenSellInIsFiveOrLess()
         {
-            IList<Item> Items = new List<Item> { new Item { Name = "Backstage passes to a TAFKAL80ETC concert", SellIn = 5, Quality = 20 } };
-            GildedRose app = new GildedRose(Items);
+            var items = new List<Item> { new Item { Name = "Backstage passes to a TAFKAL80ETC concert", SellIn = 5, Quality = 20 } };
+            var app = CreateGildedRose(items);
+
             app.UpdateQuality();
-            Assert.Equal(23, Items[0].Quality);
+
+            Assert.Equal(23, items[0].Quality);
         }
 
         [Fact]
-        public void Backstage_Pass_Quality_Goes_To_0_If_Sellin_is_0()
+        public void BackstagePass_QualityBecomesZeroAfterSellInDate()
         {
-            IList<Item> Items = new List<Item> { new Item { Name = "Backstage passes to a TAFKAL80ETC concert", SellIn = 0, Quality = 20 } };
-            GildedRose app = new GildedRose(Items);
+            var items = new List<Item> { new Item { Name = "Backstage passes to a TAFKAL80ETC concert", SellIn = 0, Quality = 20 } };
+            var app = CreateGildedRose(items);
+
             app.UpdateQuality();
-            Assert.Equal(0, Items[0].Quality);
+
+            Assert.Equal(0, items[0].Quality);
         }
 
-        
-       
         [Theory]
         [InlineData(2, 5)]
         [InlineData(0, 4)]
         [InlineData(1, 3)]
-
-        public void Sellin_Reduces_By_One_Every_Day(int sellIn, int quality)
+        public void SellInReducesByOneEachDay(int sellIn, int quality)
         {
-            IList<Item> Items = new List<Item> { new Item { Name = "Sausage", SellIn = sellIn, Quality = quality } };
-            GildedRose app = new GildedRose(Items);
+            var items = new List<Item> { new Item { Name = "Sausage", SellIn = sellIn, Quality = quality } };
+            var app = CreateGildedRose(items);
+
+            int initialSellIn = items[0].SellIn;
             app.UpdateQuality();
 
-            for (int i = 0; i < 5; i++)
-            {
-                int previousSellIn = Items[0].SellIn; // Store the current SellIn before update
-                app.UpdateQuality(); // Update the quality (and SellIn)
-
-                // Assert: Ensure SellIn decreases by 1 each day
-                Assert.Equal(previousSellIn - 1, Items[0].SellIn);
-            }
-          
-
+            // Assert: Ensure SellIn decreases by 1 each day
+            Assert.Equal(initialSellIn - 1, items[0].SellIn);
         }
-
-  
+    }
 }
-}
-

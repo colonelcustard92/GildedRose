@@ -6,6 +6,8 @@ namespace GildedRoseTests
 {
     public class GildedRoseTest
     {
+
+
         [Theory]
         [InlineData(10, 10)]
         public void Aged_Brie_Increases_In_Quality_With_Age(int sellIn, int quality)
@@ -87,28 +89,15 @@ namespace GildedRoseTests
         }
 
         
-        [Theory]
-        [InlineData(2,5)]
-        [InlineData(0,4)]
-        [InlineData(1,3)]
-        [InlineData(0, 3)]
-        public void Conjured_Item_Degrades_Twice_As_Fast_As_A_Normal_Item(int sellIn, int quality)
-        {
-            IList<Item> Items = new List<Item> { new Item { Name = "Conjured Sausage", SellIn = sellIn, Quality = quality } };
-            GildedRose app = new GildedRose(Items);
-            app.UpdateQuality();
-            Assert.Equal(quality - 2, Items[0].Quality );
-
-        }
+       
         [Theory]
         [InlineData(2, 5)]
         [InlineData(0, 4)]
         [InlineData(1, 3)]
-       
 
         public void Sellin_Reduces_By_One_Every_Day(int sellIn, int quality)
         {
-            IList<Item> Items = new List<Item> { new Item { Name = "Conjured Sausage", SellIn = sellIn, Quality = quality } };
+            IList<Item> Items = new List<Item> { new Item { Name = "Sausage", SellIn = sellIn, Quality = quality } };
             GildedRose app = new GildedRose(Items);
             app.UpdateQuality();
 

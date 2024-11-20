@@ -1,12 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿
+using GildedRoseKata;
 
-namespace GildedRose.Contracts
-{
-    internal interface IItemUpdater
+    public interface IItemUpdater
     {
+        void Update(Item item);
     }
-}
+

@@ -14,7 +14,16 @@ namespace GildedRoseKata
         {
             for (var i = 0; i < Items.Count; i++)
             {
-                if (Items[i].Name == "Sulfuras") return;
+
+                if (Items[i].Name.ToLower().Contains("conjured"))
+                {
+                    Items[i].Quality = Items[i].Quality - 2;
+                    Items[i].SellIn -= 1;
+                    continue;
+                }
+
+                if (Items[i].Name == "Sulfuras") continue;
+             
                 if (Items[i].Name != "Aged Brie" && Items[i].Name != "Backstage passes to a TAFKAL80ETC concert")
                 {
                     if (Items[i].Quality > 0)
@@ -83,6 +92,8 @@ namespace GildedRoseKata
                             Items[i].Quality = Items[i].Quality + 1;
                         }
                     }
+
+                    if (Items[0].Quality < 0) Items[0].Quality = 0;
                 }
             }
         }

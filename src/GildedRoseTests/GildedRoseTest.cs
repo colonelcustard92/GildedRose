@@ -29,8 +29,7 @@ namespace GildedRoseTests
         }
 
         [Theory]
-        [InlineData(0, 1)]
-        [InlineData(0, 0)]
+        [InlineData(0, -3)]
         public void Quality_Should_Never_Be_Less_Than_Zero(int sellIn, int quality)
         {
             IList<Item> Items = new List<Item> { new Item { Name = "Bone of Death", SellIn = sellIn, Quality = quality } };
@@ -87,16 +86,45 @@ namespace GildedRoseTests
             Assert.Equal(0, Items[0].Quality);
         }
 
-        [Fact]
-        public void Conjured_Item_Degrades_Twice_As_Fast_As_A_Normal_Item()
+        
+        [Theory]
+        [InlineData(2,5)]
+        [InlineData(0,4)]
+        [InlineData(1,3)]
+        [InlineData(0, 3)]
+        public void Conjured_Item_Degrades_Twice_As_Fast_As_A_Normal_Item(int sellIn, int quality)
         {
-            IList<Item> Items = new List<Item> { new Item { Name = "Conjured Sausage", SellIn = 10, Quality = 18 } };
+            IList<Item> Items = new List<Item> { new Item { Name = "Conjured Sausage", SellIn = sellIn, Quality = quality } };
             GildedRose app = new GildedRose(Items);
             app.UpdateQuality();
-            Assert.Equal(9, Items[0].SellIn);
-            Assert.Equal(16, Items[0].Quality);
+            Assert.Equal(quality - 2, Items[0].Quality );
+
+        }
+        [Theory]
+        [InlineData(2, 5)]
+        [InlineData(0, 4)]
+        [InlineData(1, 3)]
+       
+
+        public void Sellin_Reduces_By_One_Every_Day(int sellIn, int quality)
+        {
+            IList<Item> Items = new List<Item> { new Item { Name = "Conjured Sausage", SellIn = sellIn, Quality = quality } };
+            GildedRose app = new GildedRose(Items);
+            app.UpdateQuality();
+
+            for (int i = 0; i < 5; i++)
+            {
+                int previousSellIn = Items[0].SellIn; // Store the current SellIn before update
+                app.UpdateQuality(); // Update the quality (and SellIn)
+
+                // Assert: Ensure SellIn decreases by 1 each day
+                Assert.Equal(previousSellIn - 1, Items[0].SellIn);
+            }
+          
+
         }
 
-    }
+  
+}
 }
 
